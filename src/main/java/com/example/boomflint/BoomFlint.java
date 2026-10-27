@@ -3,8 +3,9 @@ package com.example.boomflint;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -41,7 +42,10 @@ public class BoomFlint implements ModInitializer {
             level.explode(null, c.x, c.y, c.z, POWER, Level.ExplosionInteraction.TNT);
 
             if (!player.getAbilities().instabuild) {
-                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+                EquipmentSlot slot = hand == InteractionHand.MAIN_HAND
+                        ? EquipmentSlot.MAINHAND
+                        : EquipmentSlot.OFFHAND;
+                stack.hurtAndBreak(1, player, slot);
             }
             return InteractionResult.SUCCESS;
         });
