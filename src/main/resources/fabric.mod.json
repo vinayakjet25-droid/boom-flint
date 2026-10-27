@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "boomflint",
+  "version": "${version}",
+  "name": "Boom Flint",
+  "description": "Flint and steel makes any block you click explode. Craft it with 2 iron ingots + 2 flint.",
+  "authors": ["You"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": { "main": ["com.example.boomflint.BoomFlint"] },
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
