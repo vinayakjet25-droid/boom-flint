@@ -6,15 +6,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class BoomFlint implements ModInitializer {
-    /** Explosion strength. TNT is 4.0, creeper is 3.0. */
-    private static final float POWER = 3.0F;
 
     @Override
     public void onInitialize() {
@@ -33,13 +31,15 @@ public class BoomFlint implements ModInitializer {
             BlockPos pos = hitResult.getBlockPos();
             BlockState state = level.getBlockState(pos);
 
-            // Remove the clicked block first (skips unbreakable ones like bedrock)
+            // Skip unbreakable blocks like bedrock
             if (state.getDestroySpeed(level, pos) >= 0.0F) {
                 level.removeBlock(pos, false);
-            }
 
-            Vec3 c = Vec3.atCenterOf(pos);
-            level.explode(null, c.x, c.y, c.z, POWER, Level.ExplosionInteraction.TNT);
+                // Spawn a primed TNT entity: flashes white, then explodes
+                Vec3 c = Vec3.atCenterOf(pos);
+                PrimedTnt tnt = new PrimedTnt(level, c.x, c.y, c.z, player);
+                level.addFreshEntity(tnt);
+            }
 
             if (!player.getAbilities().instabuild) {
                 EquipmentSlot slot = hand == InteractionHand.MAIN_HAND
